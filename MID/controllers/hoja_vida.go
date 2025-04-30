@@ -1,12 +1,9 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 
 	"github.com/astaxie/beego"
-	"github.com/sena_2824182/Livestock_MID/MID/services"
 )
 
 // Hoja_vidaController operations for Hoja_vida
@@ -43,19 +40,19 @@ func (c *Hoja_vidaController) Post() {
 // @router /:id [get]
 func (c *Hoja_vidaController) GetOne() {
 	fmt.Println("Funcion Get")
-	id_contraseña := c.Ctx.Input.Param(":id")
-	fmt.Println("EL id de ingreso es:", id_contraseña)
+	// id_contraseña := c.Ctx.Input.Param(":id")
+	// fmt.Println("EL id de ingreso es:", id_contraseña)
 
-	body, _ := services.Metodo_get("servicio_registro", id_contraseña)
-	fmt.Println("EL id de registro es:", body)
-	var result map[string]interface{}
-	err := json.Unmarshal(body, &result)
-	if err != nil {
-		log.Fatal(err)
-	}
-	id_contraseña = result["Contraseña"].(map[string]interface{})["Id"].(string)
+	// body, _ := services.Metodo_get("servicio_registro", id_contraseña)
+	// fmt.Println("EL id de registro es:", body)
+	// var result map[string]interface{}
+	// err := json.Unmarshal(body, &result)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// id_contraseña = result["Contraseña"].(map[string]interface{})["Id"].(string)
 
-	fmt.Println("EL id de ingreso es:", result)
+	// fmt.Println("EL id de ingreso es:", result)
 
 }
 

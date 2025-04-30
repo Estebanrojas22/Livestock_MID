@@ -11,8 +11,8 @@ import (
 	"github.com/astaxie/beego"
 )
 
-func Metodo_get(nombre_servicio, parametro string) ([]byte, error) {
-	url := beego.AppConfig.String(nombre_servicio) + parametro
+func Metodo_get_all(host, endpoint string) ([]byte, error) {
+	url := beego.AppConfig.String(host) + endpoint
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -86,4 +86,24 @@ func Metodo_put(nombre_servicio string, id string, data []byte) ([]byte, error) 
 		log.Fatal(err)
 	}
 	return body, nil
+}
+
+func ConvertInterfaceToSliceMap(input interface{}) ([]map[string]interface{}, error) {
+	// Afirmar que es un slice de interface{}
+	list, ok := input.([]interface{})
+	if !ok {
+		return nil, fmt.Errorf("no es un []interface{}")
+	}
+
+	// Convertir cada elemento a map[string]interface{}
+	var result []map[string]interface{}
+	for i, item := range list {
+		m, ok := item.(map[string]interface{})
+		if !ok {
+			return nil, fmt.Errorf("elemento %d no es un map[string]interface{}", i)
+		}
+		result = append(result, m)
+	}
+
+	return result, nil
 }
