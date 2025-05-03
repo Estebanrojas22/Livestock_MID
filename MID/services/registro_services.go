@@ -35,10 +35,9 @@ func ProcessarJsonArreglos(datos []byte) ([]map[string]interface{}, error) {
 	return result, nil
 }
 
-func Metodo_post(nombre_servicio string, data []byte) ([]byte, error) {
-	url := beego.AppConfig.String(nombre_servicio)
+func Metodo_post(hots_servicio, endpoint string, data []byte) ([]byte, error) {
+	url := beego.AppConfig.String(hots_servicio)+endpoint
 	response, err := http.Post(url, "application/json", bytes.NewBuffer(data))
-
 	if err != nil {
 		return nil, err
 	}

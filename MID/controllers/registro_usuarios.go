@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/astaxie/beego"
 	"github.com/sena_2824182/Livestock_MID/MID/services"
@@ -30,6 +32,89 @@ func (c *Registro_usuariosController) URLMapping() {
 // @router / [post]
 func (c *Registro_usuariosController) Post() {
 
+	fmt.Println("Funcion Post")
+
+	var body_ingresa map[string]interface{}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body_ingresa); err == nil {
+		fmt.Println("json ingresa", body_ingresa)
+	}
+
+	body_contrasena:= map[string]interface{}{
+		"Contraseña":     body_ingresa["contrasena"],
+	}
+
+	bytes_contrasena, err := json.Marshal(body_contrasena)
+	if err != nil {
+		fmt.Println("Error al convertir:", err)
+		return
+	}
+
+	body_response_contrasena_byte, _:= services.Metodo_post("host_api", "credenciales", bytes_contrasena)
+
+	var response_json_contrasena map[string]interface{}
+
+	err1 := json.Unmarshal(body_response_contrasena_byte, &response_json_contrasena)
+	if err1 != nil {
+		fmt.Println("Error al deserializar:", err)
+		return
+	}
+	diastring,_ := json.Marshal(body_ingresa["dia"])
+	mestring,_ := json.Marshal(body_ingresa["mes"])
+	aniotring,_ := json.Marshal(body_ingresa["anio"])
+
+	var fecha_nacimiento = string(diastring)+"/"+ string(mestring)+"/"+ string(aniotring)
+
+	fmt.Println("fecha", fecha_nacimiento)
+
+	id_contrasena:= response_json_contrasena["Datos creados con id"].(map[string]interface{})["Id"]
+	id_tipo_documento:= body_ingresa["tipoDocumento"]
+	id_tipo_documento_string := fmt.Sprintf("%v", id_tipo_documento)
+	id_tipo_documento_int, _ := strconv.Atoi(id_tipo_documento_string)
+	id_tipo_usuario:= body_ingresa["tipoUsuario"]
+	id_tipo_usuario_string := fmt.Sprintf("%v", id_tipo_usuario)
+	id_tipo_usuario_int, _ := strconv.Atoi(id_tipo_usuario_string)
+
+
+	fmt.Println("id contraseña", id_contrasena)
+	
+	body_Usuario:= map[string]interface{}{
+		"Nombre":     body_ingresa["nombres"],
+		"Apellido": body_ingresa["apellidos"],
+		"FNacimiento": fecha_nacimiento,
+		"NDocumento": body_ingresa["numeroDocumento"],
+		"CorreoElectronico": body_ingresa["correo_electronico"],
+		"Contraseña": map[string]interface{}{"id": id_contrasena},
+		"IdTipoDocumento":  map[string]interface{}{"id": id_tipo_documento_int},
+		"IdTipoUsuario":  map[string]interface{}{"id": id_tipo_usuario_int},
+
+	}
+	bytes_usuario, err := json.Marshal(body_Usuario)
+	if err != nil {
+		fmt.Println("Error al convertir:", err)
+		return
+	}
+
+	body_response_usuario_byte, _:= services.Metodo_post("host_api", "registro_usuario", bytes_usuario)
+
+
+	var response_json_usuario map[string]interface{}
+
+	err2 := json.Unmarshal(body_response_usuario_byte, &response_json_usuario)
+	if err2 != nil {
+		fmt.Println("Error al deserializar:", err)
+		return
+	}
+
+
+
+	c.Data["json"] = map[string]interface{}{
+		"Succes":          true,
+		"Status":          200,
+		"Message":         "Creación existosa",
+		"Data":            body_ingresa,
+		
+	}
+	c.ServeJSON()
 }
 
 // GetOne ...
@@ -83,7 +168,7 @@ func (c *Registro_usuariosController) GetAll() {
 
 	var resultado []map[string]interface{}
 
-	for i := range arreglo_map_usuario{
+	for i := range arreglo_map_usuario {
 
 		fmt.Println("Valor de json solo:", arreglo_map_usuario[i])
 
@@ -103,7 +188,6 @@ func (c *Registro_usuariosController) GetAll() {
 
 		resultado = append(resultado, resultado_parcial)
 	}
-
 
 	c.Data["json"] = map[string]interface{}{
 		"Succes":  true,
