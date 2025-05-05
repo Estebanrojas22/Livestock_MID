@@ -14,7 +14,7 @@ type Registro_usuariosController struct {
 
 // URLMapping ...
 func (c *Registro_usuariosController) URLMapping() {
-	c.Mapping("Post", c.Post)
+	c.Mapping("Post", c.Post) 
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
@@ -29,6 +29,7 @@ func (c *Registro_usuariosController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *Registro_usuariosController) Post() {
+
 
 }
 
