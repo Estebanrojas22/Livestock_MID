@@ -78,8 +78,8 @@ func (c *Registro_usuariosController) Post() {
 	fmt.Println("id contraseña", id_contrasena)
 	
 	body_Usuario:= map[string]interface{}{
-		"Nombre":     body_ingresa["nombres"],
-		"Apellido": body_ingresa["apellidos"],
+		"Nombre":     body_ingresa["nombre"],
+		"Apellido": body_ingresa["apellido"],
 		"FNacimiento": fecha_nacimiento,
 		"NDocumento": body_ingresa["numeroDocumento"],
 		"CorreoElectronico": body_ingresa["correo_electronico"],
