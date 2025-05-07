@@ -20,9 +20,9 @@ func init() {
 				&controllers.Registro_usuariosController{},
 			),
 		),
-		beego.NSNamespace("/hoja",
+		beego.NSNamespace("/credenciales",
 			beego.NSInclude(
-				&controllers.Hoja_vidaController{},
+				&controllers.CredencialesController{},
 			),
 		),
 	)

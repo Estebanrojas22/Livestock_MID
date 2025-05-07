@@ -106,3 +106,23 @@ func ConvertInterfaceToSliceMap(input interface{}) ([]map[string]interface{}, er
 
 	return result, nil
 }
+
+func Metodo_get_one(host string, endpoint string) ([]byte, error) {
+	url := beego.AppConfig.String(host) + endpoint
+	fmt.Println("GET URL:", url)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error en GET:", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error leyendo respuesta:", err)
+		return nil, err
+	}
+
+	return body, nil
+}

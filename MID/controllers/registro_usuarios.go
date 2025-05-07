@@ -16,7 +16,7 @@ type Registro_usuariosController struct {
 
 // URLMapping ...
 func (c *Registro_usuariosController) URLMapping() {
-	c.Mapping("Post", c.Post) 
+	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
@@ -39,8 +39,8 @@ func (c *Registro_usuariosController) Post() {
 		fmt.Println("json ingresa", body_ingresa)
 	}
 
-	body_contrasena:= map[string]interface{}{
-		"Contraseña":     body_ingresa["contrasena"],
+	body_contrasena := map[string]interface{}{
+		"Contraseña": body_ingresa["contrasena"],
 	}
 
 	bytes_contrasena, err := json.Marshal(body_contrasena)
@@ -49,7 +49,7 @@ func (c *Registro_usuariosController) Post() {
 		return
 	}
 
-	body_response_contrasena_byte, _:= services.Metodo_post("host_api", "credenciales", bytes_contrasena)
+	body_response_contrasena_byte, _ := services.Metodo_post("host_api", "credenciales", bytes_contrasena)
 
 	var response_json_contrasena map[string]interface{}
 
@@ -58,35 +58,33 @@ func (c *Registro_usuariosController) Post() {
 		fmt.Println("Error al deserializar:", err)
 		return
 	}
-	diastring,_ := json.Marshal(body_ingresa["dia"])
-	mestring,_ := json.Marshal(body_ingresa["mes"])
-	aniotring,_ := json.Marshal(body_ingresa["anio"])
+	diastring, _ := json.Marshal(body_ingresa["dia"])
+	mestring, _ := json.Marshal(body_ingresa["mes"])
+	aniotring, _ := json.Marshal(body_ingresa["anio"])
 
-	var fecha_nacimiento = string(diastring)+"/"+ string(mestring)+"/"+ string(aniotring)
+	var fecha_nacimiento = string(diastring) + "/" + string(mestring) + "/" + string(aniotring)
 
 	fmt.Println("fecha", fecha_nacimiento)
 
-	id_contrasena:= response_json_contrasena["Datos creados con id"].(map[string]interface{})["Id"]
-	id_tipo_documento:= body_ingresa["tipoDocumento"]
+	id_contrasena := response_json_contrasena["Datos creados con id"].(map[string]interface{})["Id"]
+	id_tipo_documento := body_ingresa["tipoDocumento"]
 	id_tipo_documento_string := fmt.Sprintf("%v", id_tipo_documento)
 	id_tipo_documento_int, _ := strconv.Atoi(id_tipo_documento_string)
-	id_tipo_usuario:= body_ingresa["tipoUsuario"]
+	id_tipo_usuario := body_ingresa["tipoUsuario"]
 	id_tipo_usuario_string := fmt.Sprintf("%v", id_tipo_usuario)
 	id_tipo_usuario_int, _ := strconv.Atoi(id_tipo_usuario_string)
 
-
 	fmt.Println("id contraseña", id_contrasena)
-	
-	body_Usuario:= map[string]interface{}{
-		"Nombre":     body_ingresa["nombres"],
-		"Apellido": body_ingresa["apellidos"],
-		"FNacimiento": fecha_nacimiento,
-		"NDocumento": body_ingresa["numeroDocumento"],
-		"CorreoElectronico": body_ingresa["correo_electronico"],
-		"Contraseña": map[string]interface{}{"id": id_contrasena},
-		"IdTipoDocumento":  map[string]interface{}{"id": id_tipo_documento_int},
-		"IdTipoUsuario":  map[string]interface{}{"id": id_tipo_usuario_int},
 
+	body_Usuario := map[string]interface{}{
+		"Nombre":            body_ingresa["nombre"],
+		"Apellido":          body_ingresa["apellido"],
+		"FNacimiento":       fecha_nacimiento,
+		"NDocumento":        body_ingresa["numeroDocumento"],
+		"CorreoElectronico": body_ingresa["correo_electronico"],
+		"Contraseña":        map[string]interface{}{"id": id_contrasena},
+		"IdTipoDocumento":   map[string]interface{}{"id": id_tipo_documento_int},
+		"IdTipoUsuario":     map[string]interface{}{"id": id_tipo_usuario_int},
 	}
 	bytes_usuario, err := json.Marshal(body_Usuario)
 	if err != nil {
@@ -94,8 +92,7 @@ func (c *Registro_usuariosController) Post() {
 		return
 	}
 
-	body_response_usuario_byte, _:= services.Metodo_post("host_api", "registro_usuario", bytes_usuario)
-
+	body_response_usuario_byte, _ := services.Metodo_post("host_api", "registro", bytes_usuario)
 
 	var response_json_usuario map[string]interface{}
 
@@ -105,14 +102,11 @@ func (c *Registro_usuariosController) Post() {
 		return
 	}
 
-
-
 	c.Data["json"] = map[string]interface{}{
-		"Succes":          true,
-		"Status":          200,
-		"Message":         "Creación existosa",
-		"Data":            body_ingresa,
-		
+		"Succes":  true,
+		"Status":  200,
+		"Message": "Creación existosa",
+		"Data":    body_ingresa,
 	}
 	c.ServeJSON()
 }
@@ -125,20 +119,7 @@ func (c *Registro_usuariosController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *Registro_usuariosController) GetOne() {
-	fmt.Println("Funcion Get")
-	// 	id_contraseña := c.Ctx.Input.Param(":id")
-	// 	fmt.Println("EL id de ingreso es:", id_contraseña)
-
-	// 	body, _ := services.Metodo_get("servicio_registro", id_contraseña)
-	// 	fmt.Println("EL id de registro es:", body)
-	// 	var result map[string]interface{}
-	// 	err := json.Unmarshal(body, &result)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	// 	id_contraseña = result["Contraseña"].(map[string]interface{})["Id"].(string)
-
-	// fmt.Println("EL id de ingreso es:", result)
+	
 }
 
 // GetAll ...

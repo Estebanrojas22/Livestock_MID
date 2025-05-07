@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/astaxie/beego/plugins/cors"
 	_ "github.com/sena_2824182/Livestock_MID/MID/routers"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/plugins/cors"
 )
 
 func main() {
