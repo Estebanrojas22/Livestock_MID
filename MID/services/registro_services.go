@@ -126,3 +126,20 @@ func Metodo_get_one(host string, endpoint string) ([]byte, error) {
 
 	return body, nil
 }
+
+func ToMap(i interface{}) (map[string]interface{}, error) {
+	if m, ok := i.(map[string]interface{}); ok {
+		return m, nil
+	}
+	return nil, fmt.Errorf("no se puede convertir a map[string]interface{}")
+}
+
+
+func MapToString(m map[string]interface{}) (string, error) {
+	bytes, err := json.Marshal(m)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
+}
+

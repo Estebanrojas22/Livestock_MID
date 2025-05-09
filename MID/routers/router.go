@@ -25,6 +25,11 @@ func init() {
 				&controllers.CredencialesController{},
 			),
 		),
+		beego.NSNamespace("/comentario",
+			beego.NSInclude(
+				&controllers.ComentarioController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
