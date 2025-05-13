@@ -52,9 +52,13 @@ func (c *ComentarioController) GetOne() {
 	body_map, _ := services.ProcessarJson(body)
 	//fmt.Println(verde("getOne"), body_map)
 	comentarios := body_map["Consulta de id"].([]interface{})
-	for _ ,comentario := range comentarios {
-
-		//fmt.Println(verde("comentario: "), i+1, comentario)
+	fmt.Println(verde("comentarios: "), comentarios)
+	comentarios_map2, _ := services.ToMapStringInterface(comentarios[0])
+	resultado_final = append(resultado_final, map[string]interface{}{
+		"id_ Publicacion":    comentarios_map2["IdPublicacion"],
+		"nombre_Publicacion": comentarios_map2["IdTPublicacionTipoPublicacion"].(map[string]interface{})["NombrePublicacion"],
+	})
+	for _, comentario := range comentarios {
 
 		comentario_map, _ := services.ToMapStringInterface(comentario)
 
@@ -73,15 +77,13 @@ func (c *ComentarioController) GetOne() {
 		nombre_usuario := usuario.(map[string]interface{})["Nombre"]
 		apellido_usuario := usuario.(map[string]interface{})["Apellido"]
 		fmt.Println(verde("Nombre de usuario: "), nombre_usuario, apellido_usuario)
+		nombre_completo := fmt.Sprintf("%v %v", nombre_usuario, apellido_usuario)
 
 		resultado_final = append(resultado_final, map[string]interface{}{
-			"id_ Publicacion":            comentario_map["IdPublicacion"],
-			"nombre_Publicacion":        comentario_map["IdTPublicacionTipoPublicacion"].(map[string]interface{})["NombrePublicacion"],
-			
-
-
-	})
-}
+			"comentario": comentario_map["Comentarios"],
+			"usuario":    nombre_completo,
+		})
+	}
 	c.Data["json"] = resultado_final
 	c.ServeJSON()
 
