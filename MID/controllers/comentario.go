@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/astaxie/beego"
+	"github.com/fatih/color"
 	"github.com/sena_2824182/Livestock_MID/MID/services"
 )
 
@@ -40,31 +41,50 @@ func (c *ComentarioController) Post() {
 // @Failure 403 :id is empty
 // @router /:id/:id_2 [get]
 func (c *ComentarioController) GetOne() {
-	fmt.Println("Funcion Get")
+	var resultado_final []map[string]interface{}
+	verde := color.New(color.FgGreen).SprintFunc()
+	//fmt.Println(verde("Funcion Get"))
 
 	id_ingreso, id_ingreso_2 := c.Ctx.Input.Param(":id"), c.Ctx.Input.Param(":id_2")
 
-	body, _ := services.Metodo_get_one("host_api2", "comentario?query=IdPublicacion:"+ id_ingreso +",IdTPublicacionTipoPublicacion.Id:"+id_ingreso_2)
+	body, _ := services.Metodo_get_one("host_api2", "comentario?query=IdPublicacion:"+id_ingreso+",IdTPublicacionTipoPublicacion.Id:"+id_ingreso_2)
 
 	body_map, _ := services.ProcessarJson(body)
-	fmt.Println("getOne", body_map)
-	comentarios:= body_map["Consulta de id"].([]interface{})
-	for i, comentario := range comentarios {
+	//fmt.Println(verde("getOne"), body_map)
+	comentarios := body_map["Consulta de id"].([]interface{})
+	fmt.Println(verde("comentarios: "), comentarios)
+	comentarios_map2, _ := services.ToMapStringInterface(comentarios[0])
+	resultado_final = append(resultado_final, map[string]interface{}{
+		"id_ Publicacion":    comentarios_map2["IdPublicacion"],
+		"nombre_Publicacion": comentarios_map2["IdTPublicacionTipoPublicacion"].(map[string]interface{})["NombrePublicacion"],
+	})
+	for _, comentario := range comentarios {
 
-		fmt.Println("comentario: ", i, comentario)
+		comentario_map, _ := services.ToMapStringInterface(comentario)
 
-		comentario_map, _ := services.ToMap(comentario)
+		fmt.Println(verde("comentario usuario: "), comentario_map)
+		id_usuario := comentario_map["IdUsuario"]
 
-		fmt.Println("comentario id usuario: ", comentario_map["IdUsuario"])
-		id_usuario := comentario_map["IdUsuario"].(map[string]interface{})["IdUsuario"]
-		fmt.Println("comentario id usuario: ", id_usuario)
-		// body_usuario, _ := services.Metodo_get_one("host_api","registro_usuario?query=Id:" + id_usuario)
-		// usuario_map, _ := services.ProcessarJson(body_usuario)
+		fmt.Println(verde("comentario id usuario 1:"), id_usuario)
+		id_usuario_string := fmt.Sprintf("%v", id_usuario)
+		url := "registro_usuario/" + id_usuario_string
+		body_usuario, _ := services.Metodo_get_one("host_api", url)
+		body_usuario_map, _ := services.ProcessarJson(body_usuario)
 
-		// fmt.Println("usuario: ", usuario_map)
+		//fmt.Println(verde("usuario: "), body_usuario_map)
+
+		usuario := body_usuario_map["Consulta de id"]
+		nombre_usuario := usuario.(map[string]interface{})["Nombre"]
+		apellido_usuario := usuario.(map[string]interface{})["Apellido"]
+		fmt.Println(verde("Nombre de usuario: "), nombre_usuario, apellido_usuario)
+		nombre_completo := fmt.Sprintf("%v %v", nombre_usuario, apellido_usuario)
+
+		resultado_final = append(resultado_final, map[string]interface{}{
+			"comentario": comentario_map["Comentarios"],
+			"usuario":    nombre_completo,
+		})
 	}
-
-	c.Data["json"] = body_map
+	c.Data["json"] = resultado_final
 	c.ServeJSON()
 
 }
