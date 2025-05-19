@@ -1,3 +1,4 @@
+.
 module github.com/sena_2824182/Livestock_MID/MID
 
 go 1.23.1
