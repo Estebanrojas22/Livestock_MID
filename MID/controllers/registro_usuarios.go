@@ -82,7 +82,7 @@ func (c *Registro_usuariosController) Post() {
 		"FNacimiento":       fecha_nacimiento,
 		"NDocumento":        body_ingresa["numeroDocumento"],
 		"CorreoElectronico": body_ingresa["correo_electronico"],
-		"Contraseña":        map[string]interface{}{"id": id_contrasena},
+		"Contrasena":        map[string]interface{}{"id": id_contrasena},
 		"IdTipoDocumento":   map[string]interface{}{"id": id_tipo_documento_int},
 		"IdTipoUsuario":     map[string]interface{}{"id": id_tipo_usuario_int},
 	}
@@ -92,9 +92,11 @@ func (c *Registro_usuariosController) Post() {
 		return
 	}
 
-	body_response_usuario_byte, _ := services.Metodo_post("host_api", "registro", bytes_usuario)
+	body_response_usuario_byte, _ := services.Metodo_post("host_api", "registro_usuario", bytes_usuario)
 
 	var response_json_usuario map[string]interface{}
+
+	fmt.Println("body_response_usuario_byte", string(body_response_usuario_byte))
 
 	err2 := json.Unmarshal(body_response_usuario_byte, &response_json_usuario)
 	if err2 != nil {
@@ -164,7 +166,7 @@ func (c *Registro_usuariosController) GetAll() {
 			"Celular":           arreglo_map_usuario[i],
 			"TipoUsuario":       arreglo_map_usuario[i]["IdTipoUsuario"].(map[string]interface{})["Nombre"],
 			"Contraseña":        arreglo_map_usuario[i]["Contraseña"].(map[string]interface{})["contraseña"],
-			"Activo":            arreglo_map_usuario[i]["Celular"],
+			"Activo":            arreglo_map_usuario[i]["Activo"],
 		}
 
 		resultado = append(resultado, resultado_parcial)
