@@ -40,7 +40,7 @@ func (c *Registro_usuariosController) Post() {
 	}
 
 	body_contrasena := map[string]interface{}{
-		"Contraseña": body_ingresa["contrasena"],
+		"Contrasena": body_ingresa["contrasena"],
 	}
 
 	bytes_contrasena, err := json.Marshal(body_contrasena)
@@ -82,7 +82,7 @@ func (c *Registro_usuariosController) Post() {
 		"FNacimiento":       fecha_nacimiento,
 		"NDocumento":        body_ingresa["numeroDocumento"],
 		"CorreoElectronico": body_ingresa["correo_electronico"],
-		"Contraseña":        map[string]interface{}{"id": id_contrasena},
+		"Contrasena":        map[string]interface{}{"id": id_contrasena},
 		"IdTipoDocumento":   map[string]interface{}{"id": id_tipo_documento_int},
 		"IdTipoUsuario":     map[string]interface{}{"id": id_tipo_usuario_int},
 	}
@@ -119,7 +119,7 @@ func (c *Registro_usuariosController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *Registro_usuariosController) GetOne() {
-	
+
 }
 
 // GetAll ...
@@ -163,7 +163,7 @@ func (c *Registro_usuariosController) GetAll() {
 			"CorreoElectronico": arreglo_map_usuario[i]["CorreoElectronico"],
 			"Celular":           arreglo_map_usuario[i],
 			"TipoUsuario":       arreglo_map_usuario[i]["IdTipoUsuario"].(map[string]interface{})["Nombre"],
-			"Contraseña":        arreglo_map_usuario[i]["Contraseña"].(map[string]interface{})["contraseña"],
+			"Contrasena":        arreglo_map_usuario[i]["Contrasena"].(map[string]interface{})["contrasena"],
 			"Activo":            arreglo_map_usuario[i]["Celular"],
 		}
 
@@ -171,11 +171,11 @@ func (c *Registro_usuariosController) GetAll() {
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"Succes":  true,
-		"Status":  200,
-		"Message": "Consulta existosa",
-		"Data":    resultado,
-		// "Cantidad paises": len(resultado),
+		"Succes":            true,
+		"Status":            200,
+		"Message":           "Consulta existosa",
+		"Data":              resultado,
+		"Cantidad usuarios": len(resultado),
 	}
 	c.ServeJSON()
 }

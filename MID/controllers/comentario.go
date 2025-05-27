@@ -83,6 +83,10 @@ func (c *ComentarioController) GetOne() {
 			"comentario": comentario_map["Comentarios"],
 			"usuario":    nombre_completo,
 		})
+
+
+
+
 	}
 	c.Data["json"] = resultado_final
 	c.ServeJSON()

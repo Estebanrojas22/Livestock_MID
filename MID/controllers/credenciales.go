@@ -70,6 +70,7 @@ func (c *CredencialesController) GetOne() {
 		c.Data["json"] = map[string]interface{}{
 			"Success": false,
 			"Message": "Error al decodificar respuesta",
+
 		}
 		c.ServeJSON()
 		return
